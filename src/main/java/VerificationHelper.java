@@ -91,8 +91,11 @@ public class VerificationHelper {
         //getPageTitle
         String title = verificationHelper.getPageTitle();
         System.out.println("Page title: " + title);
+
+        //MaleGender WebElement
         WebElement maleGender = driver.findElement(By.id("male"));
         String elementName = maleGender.getAccessibleName();
+
         //maleGender Status
         boolean maleDisplayedStatus = verificationHelper.isDisplay(maleGender);
         boolean maleSelectedStatus = verificationHelper.isSelect(maleGender);
