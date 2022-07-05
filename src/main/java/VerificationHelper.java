@@ -15,37 +15,36 @@ public record VerificationHelper(WebDriver driver) {
     }
 
     public boolean isDisplay(WebElement element) {
-        boolean status;
         try {
-            status = element.isDisplayed();
+             element.isDisplayed();
+             return true;
         } catch (NoSuchElementException e) {
             e.printStackTrace();
-            status = false;
+            return false;
         }
-        return status;
+
     }
 
     public boolean isSelect(WebElement element) {
-        boolean status;
         try {
-            status = element.isSelected();
-
+           element.isSelected();
+           return false;
         } catch (Exception e) {
             e.printStackTrace();
-            status = true;
+            return true;
         }
-        return status;
+
     }
 
     public boolean isEnable(WebElement element) {
-        boolean status;
         try {
-            status = element.isEnabled();
+             element.isEnabled();
+             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            status = false;
+            return false;
         }
-        return status;
+
     }
 
     public String getTextFromElement(WebElement element) {
