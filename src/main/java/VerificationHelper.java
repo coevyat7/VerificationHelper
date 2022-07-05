@@ -86,11 +86,11 @@ public class VerificationHelper {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         VerificationHelper verificationHelper = new VerificationHelper(driver);
+        driver.get("https://itera-qa.azurewebsites.net/home/automation");
 
         //getPageTitle
         String title = verificationHelper.getPageTitle();
         System.out.println("Page title: " + title);
-        driver.get("https://itera-qa.azurewebsites.net/home/automation");
         WebElement maleGender = driver.findElement(By.id("male"));
         String elementName = maleGender.getAccessibleName();
         //maleGender Status
