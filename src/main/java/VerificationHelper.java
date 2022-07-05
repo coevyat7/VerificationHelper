@@ -4,14 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.NoSuchElementException;
 
-public class VerificationHelper {
-    private WebDriver driver;
-
-    public VerificationHelper(WebDriver driver) {
-        this.driver = driver;
-    }
+public record VerificationHelper(WebDriver driver) {
 
     public String getPageTitle() {
         var title = driver.getTitle();
@@ -80,20 +76,39 @@ public class VerificationHelper {
         return att;
     }
 
-    public static void main(String[] args) {
-        WebDriver driver = WebDriverManager.chromedriver().create();
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
-        VerificationHelper verificationHelper = new VerificationHelper(driver);
-        driver.get("https://itera-qa.azurewebsites.net/home/automation");
+    private WebElement getElement(By locator) {
+        WebElement element;
+        try {
+            element = driver.findElement(locator);
 
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            element = null;
+        }
+        return element;
+    }
+
+    public List<WebElement> getElements(By locator) {
+        List<WebElement> list;
+        try {
+            list = driver.findElements(locator);
+
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+            list = null;
+        }
+        return list;
+    }
+
+    public static void main(String[] args) {
+        WebDriver driver = invokeBrowser();
+        VerificationHelper verificationHelper = new VerificationHelper(driver);
         //getPageTitle
         String title = verificationHelper.getPageTitle();
         System.out.println("Page title: " + title);
 
         //MaleGender WebElement
-        WebElement maleGender = driver.findElement(By.id("male"));
+        WebElement maleGender = verificationHelper.getElement(By.id("male"));
         String elementName = maleGender.getAccessibleName();
 
         //maleGender Status
@@ -115,17 +130,17 @@ public class VerificationHelper {
         System.out.println("Male Selected Status After Clicking is: " + maleSelectedStatusAfter);
 
         //Element with Disabled Status Check.
-        WebElement other = driver.findElement(By.id("other"));
+        WebElement other = verificationHelper.getElement(By.id("other"));
         boolean otherEnabledStatus = verificationHelper.isEnable(other);
         System.out.println(other.getAccessibleName() + " Enabled Status is: " + otherEnabledStatus);
 
         //GetText From Element
-        WebElement nameLabel = driver.findElement(By.cssSelector("label[for='Name']"));
+        WebElement nameLabel = verificationHelper.getElement(By.cssSelector("label[for='Name']"));
         String text = verificationHelper.getTextFromElement(nameLabel);
         System.out.println(nameLabel.getAccessibleName() + " Inner Text: " + text);
 
         //SendKeysToElement
-        WebElement name = driver.findElement(By.id("name"));
+        WebElement name = verificationHelper.getElement(By.id("name"));
         verificationHelper.sendKeysToElement(name, "User1");
 
         //Get Attribute Of WebElement
@@ -133,5 +148,22 @@ public class VerificationHelper {
         System.out.println(name.getAccessibleName() + " PlaceHolder Value is: " + att);
 
     }
+
+    public static WebDriver invokeBrowser() {
+        WebDriver driver;
+        try {
+            driver = WebDriverManager.chromedriver().create();
+            driver.manage().window().maximize();
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
+            driver.get("https://itera-qa.azurewebsites.net/home/automation");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            driver = null;
+        }
+        return driver;
+    }
+
 
 }
