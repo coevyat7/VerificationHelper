@@ -106,7 +106,7 @@ public class VerificationHelper {
         System.out.println(elementName + " Selected Status: " + maleSelectedStatus);
         System.out.println(elementName + "Enabled Status: " + maleEnabledStatus);
 
-        //Click On maleGender Element only if it's isSelected Method Return False
+        //Click On maleGender Element only if it's isSelect Method Return False
         if (!maleSelectedStatus) {
             maleGender.click();
         }
